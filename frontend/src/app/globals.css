@@ -1,0 +1,154 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap");
+
+:root {
+  --font-inter: "Inter", system-ui, sans-serif;
+  --font-jakarta: "Plus Jakarta Sans", system-ui, sans-serif;
+  --font-jetbrains: "JetBrains Mono", monospace;
+
+  --bg-primary: #050b1a;
+  --bg-card: #0e1830;
+  --bg-elevated: #111d3a;
+  --accent-blue: #4cc9f0;
+  --accent-violet: #7b61ff;
+  --accent-cyan: #00d4ff;
+  --accent-emerald: #00f5a0;
+  --accent-rose: #ff4d6d;
+  --text-primary: #e8f0ff;
+  --text-muted: #6b7fa3;
+  --border-color: rgba(76, 201, 240, 0.12);
+}
+
+.light {
+  --bg-primary: #f0f4ff;
+  --bg-card: #ffffff;
+  --bg-elevated: #ffffff;
+  --text-primary: #0a0f1e;
+  --text-muted: #5a6b8a;
+  --border-color: rgba(76, 201, 240, 0.2);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-bg-primary text-text-primary font-sans antialiased;
+    transition: background-color 300ms ease, color 300ms ease;
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply rounded-xl border backdrop-blur-glass shadow-glow;
+    border-color: var(--border-color);
+    background-color: color-mix(in srgb, var(--bg-card) 80%, transparent);
+  }
+
+  .glass-elevated {
+    @apply rounded-xl border backdrop-blur-glass;
+    border-color: var(--border-color);
+    background-color: color-mix(in srgb, var(--bg-elevated) 90%, transparent);
+  }
+
+  .neon-border-active {
+    border-left: 3px solid var(--accent-cyan);
+    background: linear-gradient(90deg, rgba(76, 201, 240, 0.12) 0%, transparent 100%);
+  }
+
+  .gradient-mesh {
+    background:
+      radial-gradient(ellipse 80% 50% at 20% 40%, rgba(123, 97, 255, 0.15), transparent),
+      radial-gradient(ellipse 60% 40% at 80% 20%, rgba(76, 201, 240, 0.12), transparent),
+      radial-gradient(ellipse 50% 60% at 50% 90%, rgba(0, 212, 255, 0.08), transparent),
+      var(--bg-primary);
+    background-size: 200% 200%;
+    animation: gradient-shift 12s ease infinite;
+  }
+
+  .grid-overlay {
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-5 py-2.5 font-semibold text-bg-primary transition-all duration-200;
+    background: linear-gradient(135deg, var(--accent-blue), var(--accent-violet));
+    box-shadow: 0 0 24px rgba(76, 201, 240, 0.35);
+  }
+
+  .btn-primary:hover {
+    box-shadow: 0 0 36px rgba(76, 201, 240, 0.5);
+    transform: translateY(-1px);
+  }
+
+  .btn-primary:focus-visible {
+    @apply outline-none ring-2 ring-accent-blue ring-offset-2 ring-offset-bg-primary;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg border border-border bg-bg-elevated px-4 py-2 text-sm font-medium text-text-primary transition-all hover:shadow-glow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-blue;
+  }
+
+  .btn-secondary:hover {
+    border-color: rgba(76, 201, 240, 0.4);
+  }
+
+  .badge-glioma {
+    @apply rounded-full px-2.5 py-0.5 text-xs font-semibold uppercase tracking-wide text-accent-rose;
+    background-color: rgba(255, 77, 109, 0.2);
+  }
+
+  .badge-meningioma {
+    @apply rounded-full px-2.5 py-0.5 text-xs font-semibold uppercase tracking-wide text-orange-400;
+    background-color: rgba(249, 115, 22, 0.2);
+  }
+
+  .badge-pituitary {
+    @apply rounded-full px-2.5 py-0.5 text-xs font-semibold uppercase tracking-wide text-yellow-400;
+    background-color: rgba(234, 179, 8, 0.2);
+  }
+
+  .badge-normal {
+    @apply rounded-full px-2.5 py-0.5 text-xs font-semibold uppercase tracking-wide text-accent-emerald;
+    background-color: rgba(0, 245, 160, 0.2);
+  }
+
+  .input-field {
+    @apply w-full rounded-lg border border-border bg-bg-elevated px-4 py-2.5 text-sm text-text-primary placeholder:text-text-muted transition-colors focus:outline-none focus:ring-2;
+  }
+
+  .input-field:focus {
+    border-color: rgba(76, 201, 240, 0.5);
+    --tw-ring-color: rgba(76, 201, 240, 0.3);
+  }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(76, 201, 240, 0.25);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(76, 201, 240, 0.4);
+}

@@ -1,0 +1,356 @@
+================================================================================
+PROJECT INFORMATION QUESTIONNAIRE - Brain Tumor Classification with XAI
+================================================================================
+
+Please find below the customized project details for your Neuro-XAI platform,
+extracted from your local workspace files, trained models, datasets, and execution logs.
+
+================================================================================
+1. MODEL & ARCHITECTURE DETAILS
+================================================================================
+
+[x] What is your actual model accuracy on test set? 86.38%
+
+[x] Did you implement multi-path architecture? No
+    If Yes, describe the paths (local, global, edge, or others):
+    N/A (The academic report drafts a multi-path feature fusion network, but the 
+    actual implemented and deployed model is a single-path transfer learning 
+    model using an EfficientNet-B0 backbone with a custom classification head).
+
+[x] Did you implement attention mechanism? No
+    If Yes, which type?
+    [ ] Channel Attention
+    [ ] Spatial Attention
+    [ ] Cross-attention
+    [ ] Self-attention
+    [ ] Other: N/A
+
+[x] Did you implement a custom loss function? No
+    If Yes, provide:
+    - Name: N/A
+    - Formula/Description: N/A (Uses standard Categorical Cross-Entropy loss)
+
+[x] Total trainable parameters in your model: 1,515,444 (out of 4,214,055 total)
+
+[x] Inference time per image (seconds): 0.26 seconds (tested locally on CPU)
+
+[x] GPU memory required (GB): Not measured (Runs on CPU for inference locally; 
+    system requirements specify a minimum of 6 GB VRAM, e.g., NVIDIA RTX 3060).
+
+================================================================================
+2. DATASET INFORMATION
+================================================================================
+
+[x] Dataset name: BrainTumorDataset
+
+[x] Total number of images: 7,200
+
+[x] Image dimensions: 224 × 224 (width × height)
+
+[x] Your train-validation-test split:
+    Training: 5,600 images (77.8%)
+    Validation: 1,600 images (22.2%)
+    Testing: 1,600 images (22.2%)
+    (Validation and testing splits share the same "Testing" directory partition)
+
+[x] Number of classes: 4
+    Class names: Glioma, Meningioma, No Tumor, Pituitary Adenoma
+
+[x] Class distribution (number of images per class):
+    Class 1 (Glioma): 1,800 images (1,400 train / 400 test)
+    Class 2 (Meningioma): 1,800 images (1,400 train / 400 test)
+    Class 3 (No Tumor): 1,800 images (1,400 train / 400 test)
+    Class 4 (Pituitary Adenoma): 1,800 images (1,400 train / 400 test)
+
+[x] Data augmentation techniques used (check all that apply):
+    [x] Rotation (angle range): 20°
+    [x] Horizontal flip
+    [ ] Vertical flip
+    [ ] Brightness adjustment
+    [ ] Contrast enhancement
+    [x] Zoom/Scale (20%)
+    [ ] Elastic deformation
+    [ ] Gaussian noise
+    [x] Others: Random width shifts (20%), random height shifts (20%)
+
+================================================================================
+3. TRAINING DETAILS
+================================================================================
+
+[x] Training framework: [x] TensorFlow  [x] PyTorch  [ ] Other: _______
+    (EfficientNet-B0 primary model in TensorFlow; baseline custom CNN in PyTorch)
+
+[x] Optimizer used: Adam
+
+[x] Initial learning rate: 1e-3 (Phase 1), 1e-4 (Phase 2)
+
+[x] Learning rate schedule: Two-phase step learning rate schedule. Phase 1 (5 epochs,
+    learning rate 1e-3, frozen backbone) and Phase 2 (10 epochs, learning rate 1e-4,
+    last 20 layers of the backbone unfrozen).
+
+[x] Batch size: 32
+
+[x] Number of epochs trained: 15 (5 warmup + 10 fine-tuning)
+
+[x] Total training time: Not measured
+
+[x] Did training curve show overfitting? [ ] Yes  [x] No
+    (Validation loss steadily decreased and stabilized around 0.078 without diverging)
+
+[x] Final training loss value: 0.029
+
+[x] Final validation loss value: 0.078
+
+[x] Early stopping used? [x] Yes (Patience: 5 epochs)  [ ] No
+
+================================================================================
+4. PERFORMANCE METRICS (TEST SET)
+================================================================================
+
+[x] Overall Accuracy: 86.38 %
+
+Per-class metrics:
+  Class 1 (Glioma):
+    - Precision: 82.06%
+    - Recall: 83.50%
+    - F1-Score: 0.8278
+  
+  Class 2 (Meningioma):
+    - Precision: 91.96%
+    - Recall: 65.75%
+    - F1-Score: 0.7668
+  
+  Class 3 (No Tumor):
+    - Precision: 92.74%
+    - Recall: 99.00%
+    - F1-Score: 0.9577
+  
+  Class 4 (Pituitary Adenoma):
+    - Precision: 81.04%
+    - Recall: 97.25%
+    - F1-Score: 0.8841
+
+[x] Sensitivity/Recall (overall): 86.38% (Macro Average)
+
+[x] Specificity (overall): 95.46% (Macro Average)
+    - Glioma specificity: 93.92%
+    - Meningioma specificity: 98.08%
+    - No Tumor specificity: 97.42%
+    - Pituitary Adenoma specificity: 92.42%
+
+[x] AUC-ROC Score: 0.9797 (Macro Average)
+    - Glioma: 0.9563
+    - Meningioma: 0.9714
+    - No Tumor: 0.9979
+    - Pituitary Adenoma: 0.9929
+
+================================================================================
+5. EXPLAINABILITY IMPLEMENTATION
+================================================================================
+
+Grad-CAM Implementation:
+[x] Implemented? Yes
+[x] Average generation time: 1.03 seconds (on CPU)
+[x] Any modifications to standard Grad-CAM? Yes (Percentile-based thresholding 
+    retains only the top 18% of activations [>= 82nd percentile], scales by power-law 
+    [exponent=0.65] to amplify dimmer regions, and applies a Gaussian Blur with 
+    radius=7 for smoothing before compositing onto grayscaled scans).
+
+LIME Implementation:
+[x] Implemented? Yes
+[x] Number of superpixels used: 50
+[x] Number of perturbed samples: 120
+[x] Average generation time: 2.25 seconds
+[x] Any modifications? Yes (Custom K-Means SLIC segmentation segment boundaries 
+    with compactness 15.0 and max iterations 4 to bypass scipy/skimage dependencies. 
+    Uses Ridge Regression [L2 regularization, lambda=1.0] instead of Lasso).
+
+SHAP Implementation:
+[x] Implemented? Yes
+[x] Type (TreeExplainer/KernelExplainer/DeepExplainer): Integrated Gradients (Path SHAP variant)
+[x] Average generation time: 5.58 seconds
+[x] Any modifications? Yes (Evaluates 20 path steps between an all-zero baseline tensor 
+    and the input image, calculates average gradients, applies power-law scaling [0.5], 
+    and applies a Gaussian Blur [radius=5] to clean attribution noise).
+
+Other XAI methods implemented:
+[ ] Attention Rollout
+[ ] Layer-wise Relevance Propagation (LRP)
+[ ] Concept Activation Vectors (TCAV)
+[ ] Others: N/A
+
+================================================================================
+6. DATA PREPROCESSING
+================================================================================
+
+[x] Image resizing method: Resized to 224x224 using LANCZOS interpolation filtering
+[x] Normalization used:
+  [ ] Min-Max scaling to [0, 1]
+  [ ] Standardization (zero mean, unit variance)
+  [x] ImageNet normalization (Scaled via Keras' EfficientNet preprocess_input)
+  [ ] Custom: _______________________
+
+[x] Did you apply any of these preprocessing techniques:
+  [ ] Skull stripping
+  [ ] Histogram equalization/CLAHE
+  [ ] Filtering (bilateral, Gaussian, etc.)
+  [ ] Others: N/A
+
+================================================================================
+7. SYSTEM DEPLOYMENT
+================================================================================
+
+[x] Frontend framework used: Next.js 14 (React, TypeScript, TailwindCSS)
+[x] Backend framework used: Flask (Python, CORS-enabled)
+[x] Database used: None (uses directory uploads cache under backend/uploads/)
+[x] Is the system deployed? [ ] Yes (URL: _________)  [x] No (Localhost running)
+
+[x] Hardware used for training:
+  GPU: NVIDIA GeForce RTX 3060 (minimum specification)
+  CPU: Intel Core i7 or AMD Ryzen 7 (minimum 8 cores)
+  RAM: 16 GB
+
+[x] Hardware used for inference/deployment:
+  GPU: Not used (local run uses CPU)
+  RAM: 16 GB
+
+================================================================================
+8. UNIQUE FEATURES & INNOVATIONS
+================================================================================
+
+[x] Describe any novel techniques you implemented:
+    - Side-by-side Explainability Hub offering 3 discrete attribution viewpoints
+      (Grad-CAM for coarse areas, LIME for superpixels, SHAP for fine margins).
+    - Diagnostic Chat Advisor built directly into the sidebar that leverages classification
+      outputs to provide clinical action recommendations.
+    - PDF Report Generator compiling diagnostic class, confidence metadata, and the 
+      Grad-CAM visual attribution map into a clinical sheet.
+
+[x] Did you address any specific challenges?
+    - Confidence Safeguarding: A 40.0% confidence threshold. Below this, predictions 
+      are masked as "Unclassified/Rare Tumor" with guidelines to prevent blind AI trust.
+
+[x] Any custom loss functions or training strategies?
+    - Two-Phase Transfer Learning: Epochs 1-5 train only the custom classification head 
+      (learning rate 1e-3) with a frozen backbone, while epochs 6-15 unfreeze the last 20
+      layers of the backbone for fine-tuning (learning rate 1e-4).
+
+[x] Comparison with any baseline models? Yes
+    - Deployed EfficientNet-B0 (86.38% test accuracy, 3 XAI views) compared with:
+      1. Custom Vanilla CNN (82.3% test accuracy)
+      2. ResNet-50 + Grad-CAM (89.5% accuracy but high parameter bloat & no LIME/SHAP).
+
+================================================================================
+9. RESULTS & FINDINGS
+================================================================================
+
+[x] Most important finding:
+    - Real-time side-by-side attribution (Grad-CAM + LIME + SHAP) provides multi-resolution
+      visual verification that builds user trust and clinical interpretability, showing the 
+      model targets pathologically relevant structures rather than background artifacts.
+
+[x] Which tumor type is easiest to classify? No Tumor
+  Accuracy/Recall: 99.00%
+
+[x] Which tumor type is hardest to classify? Meningioma
+  Accuracy/Recall: 65.75%
+
+[x] Confidence distribution:
+  - Predictions with >95% confidence: 71.75%
+  - Predictions with 85-95% confidence: 10.00%
+  - Predictions with <85% confidence: 18.25%
+
+[x] Number of misclassifications by type:
+  - Glioma misclassified as: Meningioma (23), No Tumor (24), Pituitary Adenoma (19)
+  - Meningioma misclassified as: Glioma (60), No Tumor (6), Pituitary Adenoma (71)
+  - Pituitary misclassified as: Glioma (10), No Tumor (1), Meningioma (0)
+  - Normal (No Tumor) misclassified as: Glioma (3), Pituitary Adenoma (1), Meningioma (0)
+
+================================================================================
+10. CHALLENGES & LIMITATIONS
+================================================================================
+
+[x] Main challenges faced during development:
+  1. Real-time compute constraints of SHAP/LIME loops inside web API response lifecycles.
+  2. Resolving soft-tissue inter-class boundary similarities of Meningiomas on 2D T1 scans.
+  3. Safe preprocessing normalization scaling across distinct clinical image extensions.
+
+[x] Current limitations of your system:
+  1. Restricted to 2D slices rather than volumetric 3D scans.
+  2. Computation delay of local LIME/SHAP evaluations on standard CPUs.
+  3. Lacks native upload parser for medical DICOM files.
+
+[x] Any reproducibility issues encountered? No
+
+================================================================================
+11. TESTING & VALIDATION
+================================================================================
+
+[x] Did you perform cross-validation? No
+
+[x] External validation performed? No
+
+[x] Testing on different data distributions? Yes
+    - Validated on a separate unseen partition of 1,600 scans inside backend/BrainTumorDataset/Testing/
+
+================================================================================
+12. DOCUMENTATION & CODE
+================================================================================
+
+[x] Is your code well-documented? Yes
+
+[x] Available on GitHub? No (Local repository only)
+
+[x] Requirements.txt or environment file provided? Yes
+
+[x] README with setup instructions? Yes
+
+================================================================================
+13. PROJECT TIMELINE & EFFORT
+================================================================================
+
+[x] Total development time: 8 weeks
+
+[x] Team size: 1 person
+
+[x] Time breakdown (approximately):
+  - Literature review: 10%
+  - Data preprocessing: 15%
+  - Model development: 20%
+  - Training & tuning: 15%
+  - XAI implementation: 20%
+  - Web app development: 10%
+  - Testing & validation: 5%
+  - Documentation: 5%
+
+================================================================================
+14. FUTURE WORK
+================================================================================
+
+[x] Planned improvements:
+  1. Upgrade to 3D convolutional baselines or volumetric Vision Transformers.
+  2. Integrate segmentation overlays (like U-Net) to calculate tumor area and volume.
+  3. Coregistration of patient symptom indices and EHR notes into the diagnostic model.
+
+[x] Scalability plan:
+  Migrate perturbation calculations to remote cloud GPU nodes using Celery background
+  workers to keep the API server lightweight and fast.
+
+[x] Plans for clinical validation? Yes
+    - Auditing model-predicted segments against manual outlines drawn by expert radiologist cohorts.
+
+================================================================================
+15. ADDITIONAL SCREENSHOTS/LINKS
+================================================================================
+
+[x] Do you have screenshots of your project dashboard? Yes (MRI Diagnostics Step-wise UI)
+
+[x] Do you have training graphs (loss/accuracy curves)? Yes (saved as report_assets/accuracy_loss_graph.png)
+
+[x] Do you have confusion matrices? Yes (saved as report_assets/confusion_matrix.png)
+
+[x] Do you have XAI visualization examples? Yes (Grad-CAM, LIME, and SHAP output files in report_assets/)
+
+[x] Project GitHub/Demo link: Deployed locally
+
+================================================================================

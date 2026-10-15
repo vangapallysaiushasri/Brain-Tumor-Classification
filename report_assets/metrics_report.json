@@ -1,0 +1,39 @@
+{
+    "Glioma": {
+        "precision": 0.8206388206388207,
+        "recall": 0.835,
+        "f1-score": 0.8277571251548946,
+        "support": 400.0
+    },
+    "Meningioma": {
+        "precision": 0.9195804195804196,
+        "recall": 0.6575,
+        "f1-score": 0.7667638483965015,
+        "support": 400.0
+    },
+    "No Tumor": {
+        "precision": 0.927400468384075,
+        "recall": 0.99,
+        "f1-score": 0.9576783555018138,
+        "support": 400.0
+    },
+    "Pituitary Adenoma": {
+        "precision": 0.8104166666666667,
+        "recall": 0.9725,
+        "f1-score": 0.884090909090909,
+        "support": 400.0
+    },
+    "accuracy": 0.86375,
+    "macro avg": {
+        "precision": 0.8695090938174955,
+        "recall": 0.86375,
+        "f1-score": 0.8590725595360298,
+        "support": 1600.0
+    },
+    "weighted avg": {
+        "precision": 0.8695090938174955,
+        "recall": 0.86375,
+        "f1-score": 0.8590725595360297,
+        "support": 1600.0
+    }
+}
